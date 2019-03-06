@@ -12,12 +12,22 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+*{
+  padding: 0;
+  margin: 0;
+  font-family: "微软雅黑";
+}
+li{
+  list-style: none;
+}
+img{
+  vertical-align: top;
+}
+a{
+  color: inherit;
+  text-decoration: none;
+}
+html,body{
+  height: 100%;
 }
 </style>

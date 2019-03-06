@@ -4,14 +4,15 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Axios from 'axios'
+import myHeader from './components/header.vue'
+import myFooter from './components/footer.vue'
 
 Vue.config.productionTip = false
 
-Vue.prototype.$axios = Axios;
-// Axios.defaults.baseURL = '/api';
+Vue.prototype.$axios = Axios
 
-// Axios.defaults.headers['Content-Type'] = 'text/html;charset=utf-8';
-
+Vue.component('myHeader', myHeader)
+Vue.component('myFooter', myFooter)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
