@@ -7,18 +7,19 @@
 </template>
 
 <script>
+import api from '../api/kg.js'
 export default {
     name: 'get',
     data () {
         return {
             text: 'api测试页面',
             testHash: '0097E5D44B2755AA7BA2DD571F8D085F',
-            // testHash: 'http://www.kugou.com/yy/index.php?r=play/getdata&alboum_id=0&hash=?&_=?',
             data: {}
         }
     },
     mounted () {
             // api.myApi.getSongsInfo(this.testHash);
+            api.myApi.getPlaceHold()
     },
     methods: {
         getSongInfo() {

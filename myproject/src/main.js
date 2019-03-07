@@ -5,6 +5,8 @@ import App from './App'
 import router from './router'
 import Axios from 'axios'
 import myHeader from './components/header.vue'
+import myNav from './components/nav'
+import loginBox from './components/login'
 import myFooter from './components/footer.vue'
 
 Vue.config.productionTip = false
@@ -12,7 +14,9 @@ Vue.config.productionTip = false
 Vue.prototype.$axios = Axios
 
 Vue.component('myHeader', myHeader)
+Vue.component('myNav', myNav)
 Vue.component('myFooter', myFooter)
+Vue.component('loginBox', loginBox)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

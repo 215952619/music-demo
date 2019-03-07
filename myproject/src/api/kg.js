@@ -3,6 +3,22 @@ import Axios from 'axios';
 
 export default {
     myApi: {
+        getPlaceHold() {
+            let PlaceHold = 'http://so.service.kugou.com/v1/word_nofocus';
+            let otps = {
+                params: 'callback',
+                timeout: 10000,
+                prefix: 'cb',
+                name: 'cbPlaceHold'
+            };
+            jsonp(PlaceHold, otps, (err, data) => {
+                if (!err) {
+                    console.log(data.data[0].keyword);
+                } else {
+                    console.log(err);
+                }
+            })
+        },
         getSongsInfo(hash) {
             // 根据hash获取歌曲详细信息
             let time = new Date().getTime();
