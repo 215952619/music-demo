@@ -1,5 +1,5 @@
 <template>
-  <div class="header" @click="$emit('loginClick')">
+  <div class="header">
     <div class="logo">
       <img src="../assets/Clogo.png" ><span>在线音乐电台</span>
     </div>
@@ -8,16 +8,16 @@
       <img src="../assets/search.jpg" @click = 'search(searchWork)'/>
     </div>
     <div class="centerbox">
-      <span><router-link to="undefined">客服中心</router-link></span>
-      <span><router-link to="user">个人中心</router-link></span>
-      <span><router-link to="about">关于我们</router-link></span>
+      <span><router-link :to="{name:'undefined'}">客服中心</router-link></span>
+      <span><router-link :to="{name:'user'}">个人中心</router-link></span>
+      <span><router-link :to="{name:'about'}">关于我们</router-link></span>
     </div>
     <div class="loginbox" v-if="!homeData.isLogin">
-      <span class="loginbtn">[登录]</span>
-      <span class="registerbtn"><router-link to="regist">[注册]</router-link></span>
+      <span @click="$emit('loginBoxClick')">[登录]</span>
+      <span><router-link to="{name:'regist'}">[注册]</router-link></span>
     </div>
     <div class="personbox" v-if="homeData.isLogin">
-      <span><router-link to="user">{{username}}</router-link>欢迎您</span><label>[退出]</label>
+      <span><router-link :to="{name:'user'}">{{username}}</router-link>欢迎您</span><label @click="$emit('loginClick')">[退出]</label>
     </div>
   </div>
 </template>
@@ -54,21 +54,12 @@ export default {
   },
   methods: {
     search(keyword) {
-      this.$axios.get('/search/song', {
-        params: {
-            format: 'json',
-            keyword: keyword,
-            page: 0,
-            pagesize: 10,
-            showtype: 1
+      this.$router.push({
+        name: 'details',
+        query: {
+          keyword: keyword
         }
       })
-      .then(function(res) {
-          console.log(res.data.data);
-      })
-      .catch(function(err) {
-          console.log(err);
-      });
     }
   }
 }
@@ -132,6 +123,11 @@ export default {
 }
 .loginbox, .personbox{
   position: absolute;
+  width: 15%;
   right: 4rem;
+  text-align: center;
+}
+.loginbox span{
+  cursor: pointer;
 }
 </style>

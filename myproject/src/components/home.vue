@@ -1,16 +1,17 @@
 <template>
   <div class="hello">
-    <my-header id="header" :homeData='{isLogin,loginboxState}' @loginClick='isLogin=!isLogin'></my-header>
-    <login-box></login-box>
+    <my-header id="header" :homeData='{isLogin,loginboxState}' @loginBoxClick='loginboxState=!loginboxState'></my-header>
+    <login-box :homeData='{isLogin,loginboxState}' @loginBoxClick='loginboxState=!loginboxState' @close="loginboxState=false"></login-box>
     <my-nav id="nav"></my-nav>
     <ul>
       <li>
-        <a href="#/get">get</a>
+        <router-link :to="{name:'get'}">get</router-link>
       </li>
       <li>
-        <a href="#/player">player</a>
+        <router-link :to="{name:'player'}">player</router-link>
       </li>
     </ul>
+    <router-view></router-view>
     <my-footer></my-footer>
   </div>
 </template>

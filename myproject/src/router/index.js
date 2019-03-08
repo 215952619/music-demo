@@ -5,8 +5,11 @@ import Rank from '@/components/rank'
 import Plist from '@/components/plist'
 import Singer from '@/components/singer'
 import Player from '@/components/player'
-import Get from '@/components/get'
+import Details from '@/components/details'
 import Undefined from '@/components/404'
+import Get from '@/components/get'
+import User from '@/components/user'
+import About from '@/components/about'
 
 Vue.use(Router)
 
@@ -15,6 +18,10 @@ export default new Router({
     {
       path: '/',
       redirect: '/home'
+    }, {
+      path: '/home',
+      name: 'home',
+      component: Home
     }, {
       path: '/rank',
       name: 'rank',
@@ -28,13 +35,21 @@ export default new Router({
       name: 'singer',
       component: Singer
     }, {
-      path: '/home',
-      name: 'home',
-      component: Home
-    }, {
       path: '/player',
       name: 'player',
       component: Player
+    }, {
+      path: '/details',
+      name: 'details',
+      component: Details
+    }, {
+      path: '/user',
+      name: 'user',
+      component: User
+    }, {
+      path: '/about',
+      name: 'about',
+      component: About
     }, {
       path: '/get',
       name: 'get',

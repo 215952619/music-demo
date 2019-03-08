@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import api from '../api/kg.js'
 export default {
     name: 'get',
     data () {
@@ -17,9 +16,12 @@ export default {
             data: {}
         }
     },
+    created() {
+        this.testHash = this.$route.query.hash;
+        this.getSongInfo();
+    },
     mounted () {
-            // api.myApi.getSongsInfo(this.testHash);
-            api.myApi.getPlaceHold()
+
     },
     methods: {
         getSongInfo() {
@@ -41,8 +43,5 @@ export default {
 </script>
 
 <style scoped>
-*{
-    padding: 0;
-    margin: 0;
-}
+
 </style>

@@ -33,18 +33,14 @@ export default {
     data() {
         return {
             songsList: [{
-                img: 'http://singerimg.kugou.com/uploadpic/softhead/400/20180712/20180712170431642.jpg',
-                lrc: '[00:00.10]崔子格 - 风筝(电视剧《小情人》片头曲)\n[00:00.14]作词：三皮\n[00:00.43]作曲：三皮\n[00:00.84]你的味道在空气中弥漫\n[00:07.47]像夏天的雨潮湿又温暖\n[00:15.71]泥土的香气穿越记忆\n[00:23.26]飘飘荡荡的我线在你手里\n[00:30.74]忘记说起来很容易\n[00:38.15]对你也许只是游戏\n[00:45.69]风筝在天空飘来荡去\n[00:53.56]连我的样子都随你心意\n[01:34.20]我曾以为思念已经离去\n[01:41.26]像季节变换已经成习惯\n[01:49.49]牵着我的你还记得吗\n[01:57.01]飘飘荡荡的我线在你手里\n[02:04.56]忘记说起来很容易\n[02:11.87]对你也许只是游戏\n[02:19.44]风筝在天空飘来荡去\n[02:27.31]连我的样子都随你心意\n[02:34.73]忘记听起来很容易\n[02:42.09]对你动动手指而已\n[02:49.51]风筝在天空默默叹气\n[02:57.33]连我的样子都随你心意',
+                hash: '23f190b9a04e03086a9f4a158a5c5138',
                 name: '风筝',
                 singer: '崔子格',
-                src: 'http://fs.w.kugou.com/201903041114/3c58918403d7f10326444048fb64c08c/G098/M08/0F/0B/og0DAFknk66ACoOgAC4p24jcrdg242.mp3',
                 time: 189000
             }, {
-                img: 'http://singerimg.kugou.com/uploadpic/softhead/400/20170109/20170109150710384221.jpg',
-                lrc: '[00:00.76]张碧晨、杨宗纬 - 凉凉\n[00:02.75]作词：刘畅\n[00:03.67]作曲：谭旋\n[00:47.91]入夜渐微凉\n[00:49.85]繁花落地成霜\n[00:52.51]你在远方眺望\n[00:55.16]耗尽所有暮光\n[00:57.96]不思量自难相忘\n[01:08.83]夭夭桃花凉\n[01:11.53]前世你怎舍下\n[01:13.88]这一海心茫茫\n[01:16.74]还故作不痛不痒不牵强\n[01:24.29]都是假象\n[01:30.28]凉凉夜色为你思念成河\n[01:35.85]化作春泥呵护着我\n[01:41.35]浅浅岁月拂满爱人袖\n[01:45.42]片片芳菲入水流\n[01:51.94]凉凉天意潋滟一身花色\n[01:57.12]落入凡尘伤情着我\n[02:02.58]生劫易渡情劫难了\n[02:05.31]折旧的心还有几分前生的恨\n[02:13.17]还有几分\n[02:17.29]前生的恨\n[02:42.87]也曾鬓微霜\n[02:44.61]也曾因你回光\n[02:47.21]悠悠岁月漫长\n[02:49.98]怎能浪费时光\n[02:52.63]去流浪\n[02:54.57]去流浪\n[02:57.38]去换成长\n[03:04.20]灼灼桃花凉\n[03:05.88]今生愈渐滚烫\n[03:08.59]一朵已放心上\n[03:11.55]足够三生三世背影成双\n[03:15.94]背影成双\n[03:18.49]在水一方\n[03:25.34]凉凉夜色为你思念成河\n[03:30.47]化作春泥呵护着我\n[03:35.88]浅浅岁月拂满爱人袖\n[03:40.19]片片芳菲入水流\n[03:46.79]凉凉天意潋滟一身花色\n[03:51.38]落入凡尘伤情着我\n[03:57.43]生劫易渡情劫难了\n[03:59.88]折旧的心还有几分前生的恨\n[04:15.91]凉凉三生三世恍然如梦\n[04:21.21]须臾的年风干泪痕\n[04:26.86]或是回忆不能再相认\n[04:31.12]就让情分落九尘\n[04:37.65]凉凉十里何时还会春盛\n[04:42.48]又见树下一盏风存\n[04:47.90]落花有意流水无情\n[04:50.69]别让恩怨爱恨凉透那花的纯\n[05:01.64]吾生愿牵尘',
+                hash: '9c5f7afc362e4dbc38f71d50b32892fa',
                 name: '凉凉',
                 singer: '张碧晨',
-                src: 'http://fs.w.kugou.com/201903041109/76f35b8e9f54fd53abfc6c15fcf1751d/G083/M08/0E/04/kw0DAFhvcJSAAX3SAFFchlFbaO8093.mp3',
                 time: 333000
             }],
             mode: [{
@@ -66,11 +62,12 @@ export default {
             current_time: 0
         }
     },
-    created: function() {
-        console.log('created');
+    created() {
+        this.getResource(this.current_index);
     },
     mounted: function() {
         console.log('mounted');
+        console.log(this.songsList);
         this.bindData();
     },
     updated: function() {
@@ -165,7 +162,6 @@ export default {
                     _this.current_lrc = i;
                     if (i >= 5) {
                         document.getElementsByClassName('lrcInfo')[0].parentNode.scrollTop = parseInt(window.getComputedStyle(document.getElementsByClassName('lrcInfo')[0]).height) * (i - 5)
-                        console.log(document.getElementsByClassName('lrcInfo')[0].parentNode.scrollTop)
                     }
                 }
             }
@@ -176,16 +172,39 @@ export default {
             let x = event.offsetX;
             let w = window.getComputedStyle(ele).width;
             _audio.currentTime = _audio.duration * x / parseFloat(w);
+        },
+        getResource(index) {
+            let _this = this;
+            this.$axios.get('/info', {
+                params: {
+                    r: 'play/getdata',
+                    hash: _this.songsList[index].hash
+                }
+            })
+            .then(function(res) {
+                _this.songsList[index] = {
+                    ..._this.songsList[index],
+                    img: res.data.data.img,
+                    lrc: res.data.data.lyrics,
+                    src: res.data.data.play_url
+                };
+            })
+            .catch(function(err) {
+                console.log(err);
+            })
+        }
+    },
+    watch: {
+        current_index: {
+            handler(value) {
+                this.getResource(value);
+            },
+            immediate: true
         }
     }
 };
 </script>
 <style scoped>
-* {
-    padding: 0;
-    margin: 0;
-}
-
 ul {
     display: inline-block;
     width: 40%;

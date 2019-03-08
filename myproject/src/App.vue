@@ -29,4 +29,23 @@ a{
 html,body{
   height: 100%;
 }
+.capP{
+  line-height: 4rem;
+  font-size: 2rem;
+  text-indent: 0.5rem;
+  margin: 0.5rem 1rem;
+  border-bottom: 1px dashed gray;
+  position: relative;
+}
+.capS{
+  position: absolute;
+  right: 0.5rem;
+  bottom: -1rem;
+  font-size: 0.5rem;
+  color: darkgray;
+}
+.capS:hover{
+  color: red;
+  text-decoration: underline;
+}
 </style>

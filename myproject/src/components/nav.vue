@@ -7,7 +7,7 @@
         </ul>
         <ul class="navlist">
             <li v-for="(link,index) in links" :key="index" @mouseover="mouseover(index)" @mouseout="mouseout(index)">
-                <router-link :to="link.path">{{link.name}}</router-link>
+                <router-link :to="{name:link.path}">{{link.name}}</router-link>
             </li>
         </ul>
     </div>
@@ -18,16 +18,16 @@
         data(){
             return {
                 links: [{
-                    path: '/',
+                    path: 'home',
                     name: '首页'
                 }, {
-                    path: '/rank',
+                    path: 'rank',
                     name: '榜单'
                 }, {
-                    path: '/plist',
+                    path: 'plist',
                     name: '歌单'
                 }, {
-                    path: '/singer',
+                    path: 'singer',
                     name: '歌手'
                 }, {
                     path: 'player',
