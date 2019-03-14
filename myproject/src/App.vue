@@ -1,12 +1,46 @@
 <template>
   <div id="app">
+    <my-header id="header"></my-header>
+    <my-nav id="nav"></my-nav>
     <router-view/>
+    <my-footer v-show="!isPlay"></my-footer>
   </div>
 </template>
 
 <script>
+import {mapState, mapMutations} from 'vuex'
 export default {
-  name: 'App'
+  name: 'App',
+  data () {
+    return {
+      userInfo: {
+        username: '游客',
+        isVip: false,
+        vipStage: 0
+      }
+    }
+  },
+  computed: {
+    ...mapState([
+      'songsList', 'isPlay'
+    ])
+  },
+  created() {
+    this.bindData('userInfo');
+    this.bindData('storageSongsList');
+    this.undateFromStorage();
+    this.updateResource();
+  },
+  methods: {
+    updateResource() {
+      this.songsList.forEach((value, index) => {
+        this.getResource(index);
+      })
+    },
+    ...mapMutations([
+      'bindData', 'undateFromStorage', 'getResource'
+    ])
+  }
 }
 </script>
 
@@ -47,5 +81,18 @@ html,body{
 .capS:hover{
   color: red;
   text-decoration: underline;
+}
+#header{
+  width: 100%;
+  height: 5rem;
+  position: fixed;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  z-index: 99;
+}
+#nav{
+  height: 6rem;
+  padding-top: 5rem;
 }
 </style>

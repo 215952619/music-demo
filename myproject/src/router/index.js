@@ -9,6 +9,7 @@ import Details from '@/components/details'
 import Undefined from '@/components/404'
 import Get from '@/components/get'
 import User from '@/components/user'
+import Regist from '@/components/regist'
 import About from '@/components/about'
 
 Vue.use(Router)
@@ -46,6 +47,10 @@ export default new Router({
       path: '/user',
       name: 'user',
       component: User
+    }, {
+        path: '/regist',
+        name: 'regist',
+        component: Regist
     }, {
       path: '/about',
       name: 'about',

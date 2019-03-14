@@ -7,34 +7,9 @@ export default new Vuex.Store({
         loginBox: false,
         isLog: false,
         current_index: 0,
-        songsList: [{
-            hash: '23f190b9a04e03086a9f4a158a5c5138',
-            name: '风筝',
-            singer: '崔子格',
-            time: 189000
-        }, {
-            hash: '9c5f7afc362e4dbc38f71d50b32892fa',
-            name: '凉凉',
-            singer: '张碧晨',
-            time: 333000
-        }]
-    },
-    getters: {
-        async resource(state) {
-            let res = Axios.get('/info', {
-                params: {
-                    r: 'play/getdata',
-                    hash: state.songsList[state.current_index].hash
-                }
-            });
-            res.then((res) => {
-                return {
-                    img: res.data.data.img,
-                    lrc: res.data.data.lyrics,
-                    src: res.data.data.play_url
-                }
-            })
-        }
+        songsList: [],
+        storageSongsList: [],
+        isPlay: false
     },
     mutations: {
         loginBoxShow (state) {
@@ -49,7 +24,51 @@ export default new Vuex.Store({
         logout (state) {
             state.isLog = false
         },
-        getResource (state, index) {
+        addList(state, obj) {
+            let isHas = false;
+            if (obj.hasOwnProperty('hash')) {
+                if (state.songsList.length > 0) {
+                    if (state.songsList.find(value => value.hash === obj.hash)) {
+                        console.log('列表已添加');
+                        isHas = true;
+                    }
+                }
+                if (!isHas) {
+                    state.storageSongsList.push(obj);
+                    localStorage.setItem('storageSongsList', JSON.stringify(state.storageSongsList))
+                    state.songsList.push(obj);
+                }
+            } else {
+                console.log('数据传入错误');
+            }
+        },
+        removeList(state, hash) {
+            state.storageSongsList.forEach((value, index) => {
+                if (index === state.current_index) {
+                    state.current_index = ++state.current_index > state.songsList.length - 1 ? 0 : state.current_index;
+                }
+                if (value.hash === hash) {
+                    state.storageSongsList.splice(index, 1);
+                }
+            });
+            localStorage.setItem('storageSongsList', JSON.stringify(state.storageSongsList));
+            state.songsList = state.storageSongsList;
+        },
+        changeItem(state, bool) {
+            let l = state.songsList.length - 1;
+            if (bool) {
+                state.current_index = ++state.current_index > l ? 0 : state.current_index;
+            } else {
+                state.current_index = --state.current_index < 0 ? l : state.current_index;
+            }
+        },
+        listChange(state, index) {
+            state.current_index = index;
+        },
+        startPlay(state, bool) {
+            state.isPlay = bool;
+        },
+        getResource(state, index) {
             Axios.get('/info', {
                 params: {
                     r: 'play/getdata',
@@ -63,22 +82,20 @@ export default new Vuex.Store({
                     lrc: res.data.data.lyrics,
                     src: res.data.data.play_url
                 };
-                // return state.songsList[index]
             })
             .catch(function(err) {
                 console.log(err);
             })
         },
-        changeItem(state, bool) {
-            let l = state.songsList.length - 1;
-            if (bool) {
-                state.current_index = ++state.current_index > l ? 0 : state.current_index;
+        bindData(state, item) {
+            if (localStorage.getItem(item)) {
+                state[item] = JSON.parse(localStorage.getItem(item));
             } else {
-                state.current_index = --state.current_index < 0 ? l : state.current_index;
+                localStorage.setItem(item, JSON.stringify(state[item]));
             }
         },
-        listChange(state, index) {
-            state.current_index = index;
+        undateFromStorage(state) {
+            state.songsList = state.storageSongsList
         }
     }
 })

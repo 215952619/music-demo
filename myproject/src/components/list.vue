@@ -1,9 +1,10 @@
 <template>
     <ul>
-        <li :class="{current_item:index==current_index}" @click="listChange(index)"
+        <li :class="{current_item:index==current_index}" @click.stop="listChange(index)"
          v-for='(songList,index) in songsList' :key="index">
-            <span>{{index+1}}、{{songList.name}} - {{songList.singer}}</span>
-            <span>{{getMusicTime(songList.time / 1000 )}}</span>
+            <span>{{index+1}}、{{songList.songname}} - {{songList.singername}}</span>
+            <span>{{getMusicTime(songList.timelong)}}</span>
+            <a @click.stop="removeList(songList.hash)">移除</a>
         </li>
     </ul>
 </template>
@@ -24,10 +25,10 @@ export default {
     },
     methods: {
         getMusicTime(time) {
-            api.getMusicTime(time)
+            return api.getMusicTime(time)
         },
         ...mapMutations([
-            'listChange'
+            'listChange', 'removeList'
         ])
     }
 }
@@ -39,5 +40,12 @@ export default {
 li {
     list-style: none;
     line-height: 1.5rem;
+}
+a{
+    cursor: pointer;
+}
+a:hover{
+    color: red;
+    text-decoration: underline;
 }
 </style>

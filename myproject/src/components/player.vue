@@ -10,7 +10,7 @@
                 <button @click="changeMode()">{{mode[current_mode].modename}}</button>
             </div>
             <div class="info">
-                <p>{{songsList[current_index].name}} - {{songsList[current_index].singer}}</p>
+                <p>{{songsList[current_index].songname}} - {{songsList[current_index].singername}}</p>
                 <span>{{getMusicTime(current_time)}}</span>/<span>{{getMusicTime(song_time)}}</span>
                 <p class="progress" @click="jumpTime()"><span class="bar" :style="{ width : current_time / song_time * 100 + '%'}"></span></p>
             </div>
@@ -51,33 +51,30 @@ export default {
             immediate: true
         }
     },
-    // created() {
-    //     this.getResource(this.current_index);
-    // },
+    created() {
+        this.startPlay(true);
+    },
     mounted: function() {
         this.bindData();
-    },
-    updated: function() {
-        // console.log('updated');
-        // this.getPlayData();
     },
     computed: {
         ...mapState([
             'songsList', 'current_index'
         ])
     },
+    beforeDestroy() {
+        this.startPlay(false);
+    },
     methods: {
         getMusicTime(time) {
-            api.getMusicTime(time);
+            return api.getMusicTime(time);
         },
         changeStatus() {
             let audio = document.getElementById('myAudio');
             if (audio.paused) {
                 audio.play();
-                this.is_start = true;
             } else {
                 audio.pause();
-                this.is_start = false;
             }
         },
         changeMode() {
@@ -126,7 +123,7 @@ export default {
             _audio.currentTime = _audio.duration * x / parseFloat(w);
         },
         ...mapMutations([
-            'getResource', 'changeItem', 'listChange'
+            'getResource', 'changeItem', 'listChange', 'startPlay'
         ])
     }
 };

@@ -14,7 +14,7 @@
     </div>
     <div class="loginbox" v-if="!$store.state.isLog">
       <span @click="loginBoxShow">[登录]</span>
-      <span><router-link to="{name:'regist'}">[注册]</router-link></span>
+      <span><router-link :to="{name:'regist'}">[注册]</router-link></span>
     </div>
     <div class="personbox" v-if="$store.state.isLog">
       <span><router-link :to="{name:'user'}">{{username}}</router-link>欢迎您</span><label @click="logout">[退出]</label>

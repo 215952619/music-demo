@@ -15,8 +15,8 @@
                 <td>{{data.albumname}}</td>
                 <td>{{data.timelong}}</td>
                 <td>
-                    <a @click="play(data.hash)"><span></span></a>
-                    <a><span></span></a>
+                    <a @click="play(index)"><span></span></a>
+                    <a @click="addCollection(index)"><span></span></a>
                     <a><span></span></a>
                 </td>
             </tr>
@@ -38,17 +38,23 @@
 </template>
 
 <script>
+import {mapState, mapMutations} from 'vuex'
 export default {
-  name: 'Details',
-  data () {
-    return {
-        keyword: '',
-        page: 1,
-        maxpage: null,
-        size: 10,
-        searchData: []
-    }
-  },
+    name: 'Details',
+    data () {
+        return {
+            keyword: '',
+            page: 1,
+            maxpage: null,
+            size: 10,
+            searchData: []
+        }
+    },
+    computed: {
+        ...mapState([
+            'songsList', 'isPlay'
+        ])
+    },
     created() {
         this.keyword = this.$route.query.keyword;
         this.search(this.keyword, 1);
@@ -84,16 +90,16 @@ export default {
                 }
             })
             .then(function(res) {
-                console.log(res.data.data.info)
                 _this.searchData = [];
                 _this.maxpage = Math.ceil(res.data.data.total / _this.size);
                 for (let msg in res.data.data.info) {
-                    let obj = {};
-                    obj.hash = res.data.data.info[msg].hash;
-                    obj.songname = res.data.data.info[msg].songname;
-                    obj.singername = res.data.data.info[msg].singername;
-                    obj.albumname = res.data.data.info[msg].album_name;
-                    obj.timelong = res.data.data.info[msg].duration;
+                    let obj = {
+                        hash: res.data.data.info[msg].hash,
+                        songname: res.data.data.info[msg].songname,
+                        singername: res.data.data.info[msg].singername,
+                        albumname: res.data.data.info[msg].album_name,
+                        timelong: res.data.data.info[msg].duration
+                    };
                     _this.searchData.push(obj);
                 }
             })
@@ -101,11 +107,20 @@ export default {
                 console.log(err);
             });
         },
-        play(hash) {
+        play(index) {
+            this.addList(this.searchData[index]);
+            this.getResource(this.songsList.length - 1);
             this.$router.push({
                 name: 'player'
-            })
-        }
+            });
+        },
+        addCollection(index) {
+            this.addList(this.searchData[index]);
+            this.getResource(this.songsList.length - 1);
+        },
+        ...mapMutations([
+            'addList', 'getResource'
+        ])
     }
 }
 </script>
@@ -146,10 +161,10 @@ tbody a:nth-of-type(1):hover span{
     background-position: 0 -60px;
 }
 tbody a:nth-of-type(2) span{
-    background-position: -120px -150px;
+    background-position: -60px 0px;
 }
 tbody a:nth-of-type(2):hover span{
-    background-position: -120px -180px;
+    background-position: -60px -60px;
 }
 tbody a:nth-of-type(3) span{
     background-position: -210px -150px;

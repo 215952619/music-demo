@@ -6,7 +6,7 @@
     </ul>
 </template>
 <script>
-import {mapState, mapGetters} from 'vuex'
+import {mapState} from 'vuex'
 export default {
     name: 'Lyric',
     data(){
@@ -38,18 +38,15 @@ export default {
         },
         ...mapState([
             'songsList', 'current_index'
-        ]),
-        ...mapGetters([
-            'resource'
         ])
     },
     props: ['current_time'],
     beforeMount() {
-        console.log(typeof this.songsList[this.current_index]);
-        console.log(this.getLrc.lrcTimes)
+        // console.log(typeof this.songsList[this.current_index]);
+        // console.log(this.getLrc.lrcTimes)
     },
     created() {
-        console.log(11)
+        // console.log(11)
     },
     watch: {
         current_time: function(newValue, oldValue) {
