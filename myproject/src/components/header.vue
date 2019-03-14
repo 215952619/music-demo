@@ -12,18 +12,19 @@
       <span><router-link :to="{name:'user'}">个人中心</router-link></span>
       <span><router-link :to="{name:'about'}">关于我们</router-link></span>
     </div>
-    <div class="loginbox" v-if="!homeData.isLogin">
-      <span @click="$emit('loginBoxClick')">[登录]</span>
+    <div class="loginbox" v-if="!$store.state.isLog">
+      <span @click="loginBoxShow">[登录]</span>
       <span><router-link to="{name:'regist'}">[注册]</router-link></span>
     </div>
-    <div class="personbox" v-if="homeData.isLogin">
-      <span><router-link :to="{name:'user'}">{{username}}</router-link>欢迎您</span><label @click="$emit('loginClick')">[退出]</label>
+    <div class="personbox" v-if="$store.state.isLog">
+      <span><router-link :to="{name:'user'}">{{username}}</router-link>欢迎您</span><label @click="logout">[退出]</label>
     </div>
   </div>
 </template>
 
 <script>
 import jsonp from 'jsonp';
+import {mapMutations} from 'vuex';
 export default {
   name: 'MyHeader',
   data () {
@@ -32,7 +33,6 @@ export default {
       username: ''
     }
   },
-  props: ['homeData'],
   created() {
     if (localStorage.getItem('userInfo')) {
       this.username = JSON.parse(localStorage.getItem('userInfo')).username + '，';
@@ -60,7 +60,10 @@ export default {
           keyword: keyword
         }
       })
-    }
+    },
+    ...mapMutations([
+      'loginBoxShow', 'logout'
+    ])
   }
 }
 </script>

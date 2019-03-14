@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
-    <my-header id="header" :homeData='{isLogin,loginboxState}' @loginBoxClick='loginboxState=!loginboxState'></my-header>
-    <login-box :homeData='{isLogin,loginboxState}' @loginBoxClick='loginboxState=!loginboxState' @close="loginboxState=false"></login-box>
+    <my-header id="header"></my-header>
+    <login-box v-if="$store.state.loginBox"></login-box>
     <my-nav id="nav"></my-nav>
     <ul>
       <li>

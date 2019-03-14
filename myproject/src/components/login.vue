@@ -1,5 +1,5 @@
 <template>
-    <div class="box" v-if="homeData.loginboxState">
+    <div class="box" v-if="this.$store.state.loginBox">
         <div class="login">
             <div class="loginclose" @click="close">×</div>
             <p>欢迎您登陆本网站</p>
@@ -12,6 +12,7 @@
     </div>
 </template>
 <script>
+import {mapMutations} from 'vuex';
     export default {
         name: 'loginBox',
         data(){
@@ -21,12 +22,12 @@
                 password: ''
             }
         },
-        props: ['homeData'],
         methods: {
             Login() {
                 let _this = this;
                 if (this.username === 'lyy' && this.password === '123') {
-                    this.$emit('loginBoxClick');
+                    this.loginBoxHidden();
+                    this.login();
                 } else {
                     this.isPass = false;
                     setTimeout(() => {
@@ -35,8 +36,11 @@
                 }
             },
             close() {
-                this.$emit('close');
-            }
+                this.loginBoxHidden();
+            },
+            ...mapMutations([
+                'login', 'loginBoxHidden'
+            ])
         }
     }
 </script>
