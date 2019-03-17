@@ -1,55 +1,93 @@
 <template>
-    <div>
-        {{msg}} : {{specialId}}
-        <ul>
-            <li v-for="(data,index) in infoData" :key="index">{{data.filename}}</li>
-        </ul>
-    </div>
+    <list-table :pData='{data:infoData,songsList,total,maxpage,count}' class="main" @pageChage='childSearch'></list-table>
 </template>
 <script>
+import {mapState} from 'vuex'
 export default {
     data(){
         return {
-            msg: 'specialid',
-            page: 1,
-            infoData: []
+            infoData: [],
+            total: null,
+            maxpage: null,
+            size: 30,
+            count: 0
         }
     },
     computed: {
         specialId: function() {
             return this.$route.params.specialid;
-        }
+        },
+        ...mapState([
+            'songsList'
+        ])
     },
     methods: {
-        getPlistInfo(id) {
+        getPlistInfo(id, page) {
             let _this = this;
             _this.$axios.get('/api/plist/list/' + id, {
                 params: {
-                    json: 'true'
+                    json: 'true',
+                    page: page
                 }
             })
             .then(function(res) {
+                _this.infoData = [];
+                let arr = [];
+                _this.total = res.data.list.list.total;
                 _this.infoData.total = res.data.list.list.total;
+                _this.maxpage = Math.ceil(res.data.list.list.total / _this.size);
                 res.data.list.list.info.forEach(value => {
                     let obj = {
                         hash: value.hash,
-                        filename: value.filename,
-                        duration: value.duration,
-                        album_id: value.album_id,
-                        img: value.imgurl
+                        filename: value.filename
                     };
-                    _this.infoData.push(obj);
+                    arr.push(obj);
                 });
+                return arr
+            })
+            .then(function(res) {
+                res.forEach(value => {
+                    _this.$axios.get('/search/song', {
+                        params: {
+                            format: 'json',
+                            keyword: value.filename,
+                            page: 1,
+                            pagesize: 5,
+                            showtype: 1
+                        }
+                    })
+                    .then(function(msg) {
+                        msg.data.data.info.forEach(v => {
+                            if (v.hash.toUpperCase() === value.hash.toUpperCase()) {
+                                let obj = {
+                                    hash: v.hash,
+                                    songname: v.songname,
+                                    singername: v.singername,
+                                    albumname: v.album_name,
+                                    timelong: v.duration
+                                };
+                                _this.infoData.push(obj);
+                            }
+                        })
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
+                })
             })
             .catch(function(err) {
                 console.log(err);
             });
+        },
+        childSearch(page) {
+            this.getPlistInfo(this.specialId, page);
         }
     },
     watch: {
         specialId: {
             handler: function(val) {
-                this.getPlistInfo(val);
+                this.count++;
+                this.getPlistInfo(val, 1);
             },
             immediate: true
         }
@@ -57,5 +95,7 @@ export default {
 }
 </script>
 <style scoped>
-
+.main{
+    text-align: center;
+}
 </style>

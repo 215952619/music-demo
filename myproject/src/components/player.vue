@@ -46,19 +46,50 @@ export default {
         current_index: {
             handler(newVal, oldVal) {
                 this.getResource(newVal);
-                // this.$forceUpdate();
             },
             immediate: true
+        },
+        hash: {
+            handler(newVal, oldVal) {
+                let res = false;
+                this.songsList.forEach((value, index) => {
+                    if (value.hash === newVal) {
+                        this.listChange(index);
+                        res = true;
+                    }
+                })
+                if (!res) {
+                    this.listChange(0);
+                }
+            },
+            immediate: true
+        },
+        localStorage: {
+            handler(newVal, oldVal) {
+                console.log(newVal)
+                if (newVal !== oldVal) {
+                    console.log('change')
+                    console.log(this.songsList)
+                    this.$forceUpdate();
+                }
+            },
+            immediate: true,
+            deep: true
         }
     },
     created() {
         this.startPlay(true);
     },
     mounted: function() {
-        this.$forceUpdate();
         this.bindData();
     },
     computed: {
+        hash: function() {
+            return this.$route.query.hash;
+        },
+        localStorage: function() {
+            return JSON.parse(window.localStorage.getItem('storageSongsList'));
+        },
         ...mapState([
             'songsList', 'current_index'
         ])
@@ -86,13 +117,10 @@ export default {
             let _audio = document.getElementById('myAudio');
             let _this = this;
             _audio.addEventListener('timeupdate', function() {
-                _this.bindTime(_audio);
+                _this.song_time = _audio.duration;
+                _this.current_time = _audio.currentTime;
                 _this.getNext(_audio);
             })
-        },
-        bindTime(e) {
-            this.song_time = e.duration;
-            this.current_time = e.currentTime;
         },
         getNext(e) {
             if (e.ended) {

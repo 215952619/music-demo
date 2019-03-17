@@ -1,53 +1,20 @@
 <template>
   <div class="main">
-    <table>
-        <thead>
-            <td>歌曲名</td>
-            <td>歌手</td>
-            <td>专辑</td>
-            <td>时长</td>
-            <td>操作</td>
-        </thead>
-        <tbody>
-            <tr v-for="(data,index) in searchData" :key="index">
-                <td>{{data.songname}}</td>
-                <td>{{data.singername}}</td>
-                <td>{{data.albumname}}</td>
-                <td>{{data.timelong}}</td>
-                <td>
-                    <a @click="play(index, data.hash)"><span></span></a>
-                    <a @click="addCollection(index)"><span></span></a>
-                    <a><span></span></a>
-                </td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="5">
-                    <span @click="pageChange(1)">首页</span>
-                    <span @click="pageChange(false)">上一页</span>
-                    <input type="text" :max="maxpage" min="0" id="page" v-model="page" @keyup.enter="pageChange(page)" />
-                    <span @click="pageChange(page)">跳转</span>
-                    <span @click="pageChange(true)">下一页</span>
-                    <span @click="pageChange(maxpage)">尾页</span>
-                </td>
-            </tr>
-        </tfoot>
-    </table>
+    <list-table :pData='{data:searchData,songsList,total,maxpage,count}' @pageChage='childSearch'></list-table>
     </div>
 </template>
 
 <script>
-import {mapState, mapMutations} from 'vuex'
+import {mapState} from 'vuex'
 export default {
     name: 'Details',
     data () {
         return {
-            keyword: '',
-            page: 1,
-            maxpage: null,
+            total: null,
             size: 30,
-            searchData: []
+            maxpage: null,
+            searchData: [],
+            count: 0
         }
     },
     computed: {
@@ -55,42 +22,19 @@ export default {
             return this.$route.query.keyword;
         },
         ...mapState([
-            'songsList', 'isPlay'
+            'songsList'
         ])
     },
     watch: {
         reqWord: {
             handler(value) {
-                this.keyword = value;
-            },
-            immediate: true
-        },
-        keyword: {
-            handler(value) {
+                this.count++;
                 this.search(value, 1);
             },
             immediate: true
         }
     },
     methods: {
-        pageChange(arg) {
-            if (typeof arg === 'boolean') {
-                if (arg === true) {
-                    this.page = ++this.page >= this.maxpage ? this.maxpage : this.page;
-                } else {
-                    this.page = --this.page <= 1 ? 1 : this.page;
-                }
-            } else {
-                if (arg < 1) {
-                    this.page = 1;
-                } else if (arg >= 1 && arg <= this.maxpage) {
-                    this.page = arg;
-                } else {
-                    this.page = this.maxpage;
-                }
-            }
-            this.search(this.keyword, this.page);
-        },
         search(keyword, page) {
             let _this = this;
             _this.$axios.get('/search/song', {
@@ -104,6 +48,7 @@ export default {
             })
             .then(function(res) {
                 _this.searchData = [];
+                _this.total = res.data.data.total;
                 _this.maxpage = Math.ceil(res.data.data.total / _this.size);
                 for (let msg in res.data.data.info) {
                     let obj = {
@@ -120,24 +65,9 @@ export default {
                 console.log(err);
             });
         },
-        play(index, hash) {
-            this.addCollection(index);
-            this.songsList.forEach((v, i) => {
-                if (v.hash === hash) {
-                    this.listChange(i);
-                }
-            });
-            this.$router.push({
-                name: 'player'
-            });
-        },
-        addCollection(index) {
-            this.addList(this.searchData[index]);
-            this.getResource(this.songsList.length - 1);
-        },
-        ...mapMutations([
-            'addList', 'getResource', 'listChange'
-        ])
+        childSearch(page) {
+            this.search(this.reqWord, page);
+        }
     }
 }
 </script>
@@ -146,65 +76,5 @@ export default {
 .main{
     margin: 1rem 10%;
     text-align: center;
-}
-table{
-    width: 100%;
-    border-collapse: collapse;
-    line-height: 2.5rem;
-    font-size: 0.8rem;
-}
-thead{
-    background: lightslategray;
-    color: white;
-}
-tbody tr{
-    border-bottom: 1px dotted black;
-}
-tbody tr:hover{
-    background: rgba(50,50,50,0.1);
-    cursor: pointer;
-}
-tbody span{
-    display: inline-block;
-    width: 14px;
-    height: 13px;
-    background: url(../assets/icon_splice.png) no-repeat;
-    margin: 0 2px;
-}
-tbody a:nth-of-type(1) span{
-    background-position: 0 0;
-}
-tbody a:nth-of-type(1):hover span{
-    background-position: 0 -60px;
-}
-tbody a:nth-of-type(2) span{
-    background-position: -60px 0px;
-}
-tbody a:nth-of-type(2):hover span{
-    background-position: -60px -60px;
-}
-tbody a:nth-of-type(3) span{
-    background-position: -210px -150px;
-}
-tbody a:nth-of-type(3):hover span{
-    background-position: -210px -210px;
-}
-tfoot td{
-    height: 3rem;
-    color: gray;
-}
-input{
-    width: 2rem;
-    text-align: center
-}
-tfoot span{
-    display: inline-block;
-    width: 5rem;
-    line-height: 2rem;
-    margin: 0.5rem 1.5rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    background: #158fe1;
-    color: white;
 }
 </style>

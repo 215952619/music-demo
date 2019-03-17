@@ -29,6 +29,7 @@ export default {
                 }
             })
             .then(function(res) {
+                _this.infoData = [];
                 _this.infoData.total = res.data.singers.list.total;
                 res.data.singers.list.info.forEach(value => {
                     let obj = {
