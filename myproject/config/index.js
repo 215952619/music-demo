@@ -32,11 +32,11 @@ module.exports = {
           '^/search': ''
         }
       },
-      '/singer': {
-        target: 'http://www.kugou.com/yy/info',
+      '/recommend': {
+        target: 'https://m2.service.kugou.com/yueku/category/index.php',
         changeOrigin: true,
         pathRewrite: {
-          '^/singer': ''
+          '^/recommend': ''
         }
       }
     },

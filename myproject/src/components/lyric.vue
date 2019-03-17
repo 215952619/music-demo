@@ -50,6 +50,7 @@ export default {
     },
     watch: {
         current_time: function(newValue, oldValue) {
+            document.getElementsByClassName('lrcInfo')[0].parentNode.scrollTop = 0;
             for (let i = 0; i < this.getLrc.lrcTimes.length; i++) {
                 if (newValue > this.getLrc.lrcTimes[i] && newValue < this.getLrc.lrcTimes[i + 1]) {
                     this.current_lrc = i;

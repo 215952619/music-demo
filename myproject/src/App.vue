@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <my-header id="header"></my-header>
+    <login-box v-if="$store.state.loginBox"></login-box>
     <my-nav id="nav"></my-nav>
     <router-view/>
     <my-footer v-show="!isPlay"></my-footer>
@@ -13,11 +14,7 @@ export default {
   name: 'App',
   data () {
     return {
-      userInfo: {
-        username: '游客',
-        isVip: false,
-        vipStage: 0
-      }
+      msg: 'App'
     }
   },
   computed: {
@@ -29,6 +26,8 @@ export default {
     this.bindData('userInfo');
     this.bindData('storageSongsList');
     this.undateFromStorage();
+  },
+  mounted() {
     this.updateResource();
   },
   methods: {

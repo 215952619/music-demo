@@ -15,7 +15,7 @@
                 <td>{{data.albumname}}</td>
                 <td>{{data.timelong}}</td>
                 <td>
-                    <a @click="play(index)"><span></span></a>
+                    <a @click="play(index, data.hash)"><span></span></a>
                     <a @click="addCollection(index)"><span></span></a>
                     <a><span></span></a>
                 </td>
@@ -46,18 +46,31 @@ export default {
             keyword: '',
             page: 1,
             maxpage: null,
-            size: 10,
+            size: 30,
             searchData: []
         }
     },
     computed: {
+        reqWord: function() {
+            return this.$route.query.keyword;
+        },
         ...mapState([
             'songsList', 'isPlay'
         ])
     },
-    created() {
-        this.keyword = this.$route.query.keyword;
-        this.search(this.keyword, 1);
+    watch: {
+        reqWord: {
+            handler(value) {
+                this.keyword = value;
+            },
+            immediate: true
+        },
+        keyword: {
+            handler(value) {
+                this.search(value, 1);
+            },
+            immediate: true
+        }
     },
     methods: {
         pageChange(arg) {
@@ -107,9 +120,13 @@ export default {
                 console.log(err);
             });
         },
-        play(index) {
-            this.addList(this.searchData[index]);
-            this.getResource(this.songsList.length - 1);
+        play(index, hash) {
+            this.addCollection(index);
+            this.songsList.forEach((v, i) => {
+                if (v.hash === hash) {
+                    this.listChange(i);
+                }
+            });
             this.$router.push({
                 name: 'player'
             });
@@ -119,7 +136,7 @@ export default {
             this.getResource(this.songsList.length - 1);
         },
         ...mapMutations([
-            'addList', 'getResource'
+            'addList', 'getResource', 'listChange'
         ])
     }
 }

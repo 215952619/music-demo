@@ -9,7 +9,12 @@ export default new Vuex.Store({
         current_index: 0,
         songsList: [],
         storageSongsList: [],
-        isPlay: false
+        isPlay: false,
+        userInfo: {
+            username: '游客',
+            isVip: false,
+            vipStage: 0
+        }
     },
     mutations: {
         loginBoxShow (state) {
@@ -35,7 +40,7 @@ export default new Vuex.Store({
                 }
                 if (!isHas) {
                     state.storageSongsList.push(obj);
-                    localStorage.setItem('storageSongsList', JSON.stringify(state.storageSongsList))
+                    localStorage.setItem('storageSongsList', JSON.stringify(state.storageSongsList));
                     state.songsList.push(obj);
                 }
             } else {
@@ -44,15 +49,16 @@ export default new Vuex.Store({
         },
         removeList(state, hash) {
             state.storageSongsList.forEach((value, index) => {
-                if (index === state.current_index) {
-                    state.current_index = ++state.current_index > state.songsList.length - 1 ? 0 : state.current_index;
-                }
                 if (value.hash === hash) {
                     state.storageSongsList.splice(index, 1);
                 }
             });
             localStorage.setItem('storageSongsList', JSON.stringify(state.storageSongsList));
-            state.songsList = state.storageSongsList;
+            state.songsList.forEach((value, index) => {
+                if (value.hash === hash) {
+                    state.songsList.splice(index, 1);
+                }
+            });
         },
         changeItem(state, bool) {
             let l = state.songsList.length - 1;
@@ -68,8 +74,9 @@ export default new Vuex.Store({
         startPlay(state, bool) {
             state.isPlay = bool;
         },
-        getResource(state, index) {
-            Axios.get('/info', {
+        async getResource(state, index) {
+            console.log(state.songsList[index])
+            await Axios.get('/info', {
                 params: {
                     r: 'play/getdata',
                     hash: state.songsList[index].hash
@@ -82,10 +89,12 @@ export default new Vuex.Store({
                     lrc: res.data.data.lyrics,
                     src: res.data.data.play_url
                 };
+                console.log(state.songsList[index])
             })
             .catch(function(err) {
                 console.log(err);
             })
+            console.log(state.songsList[index])
         },
         bindData(state, item) {
             if (localStorage.getItem(item)) {
@@ -95,7 +104,15 @@ export default new Vuex.Store({
             }
         },
         undateFromStorage(state) {
-            state.songsList = state.storageSongsList
+            state.storageSongsList.forEach((value, index) => {
+                state.songsList[index] = {
+                    hash: value.hash,
+                    songname: value.songname,
+                    singername: value.singername,
+                    albumname: value.albumname,
+                    timelong: value.timelong
+                }
+            })
         }
     }
 })

@@ -46,7 +46,7 @@ export default {
         current_index: {
             handler(newVal, oldVal) {
                 this.getResource(newVal);
-                this.$forceUpdate();
+                // this.$forceUpdate();
             },
             immediate: true
         }
@@ -55,6 +55,7 @@ export default {
         this.startPlay(true);
     },
     mounted: function() {
+        this.$forceUpdate();
         this.bindData();
     },
     computed: {
