@@ -1,7 +1,7 @@
 <template>
     <div>
         {{msg}}
-        <router-link to="home">返回主页</router-link>
+        <router-link :to="{name:'home'}">返回首页</router-link>
     </div>
 </template>
 

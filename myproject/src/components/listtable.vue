@@ -67,20 +67,18 @@ export default {
         },
         play(index, hash) {
             this.addCollection(index);
-            let playurl = this.$router.resolve({
+            this.$router.push({
                 name: 'player',
                 query: {
                     hash: hash
                 }
             });
-            window.open(playurl.href, 'play_view');
         },
         addCollection(index) {
             this.addList(this.pData.data[index]);
-            this.getResource(this.pData.songsList.length - 1);
         },
         ...mapMutations([
-            'addList', 'getResource'
+            'addList'
         ])
     },
     watch: {

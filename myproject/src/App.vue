@@ -24,20 +24,11 @@ export default {
   },
   created() {
     this.bindData('userInfo');
-    this.bindData('storageSongsList');
-    this.undateFromStorage();
-  },
-  mounted() {
-    this.updateResource();
+    this.bindData('songsList');
   },
   methods: {
-    updateResource() {
-      this.songsList.forEach((value, index) => {
-        this.getResource(index);
-      })
-    },
     ...mapMutations([
-      'bindData', 'undateFromStorage', 'getResource'
+      'bindData'
     ])
   }
 }

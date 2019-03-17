@@ -1,64 +1,58 @@
 <template>
     <ul>
-        <li v-for="(value,index) in getLrc.lrcTexts" :key="index" class="lrcInfo" :class="{current_lrc:index==current_lrc}">
+        <li v-for="(value,index) in lrcTexts" :key="index" class="lrcInfo" :class="{current_lrc:index==current_lrc}">
             {{value}}
         </li>
     </ul>
 </template>
 <script>
-import {mapState} from 'vuex'
 export default {
     name: 'Lyric',
     data(){
         return {
-            current_lrc: 0
+            current_lrc: 0,
+            lrcTimes: [],
+            lrcTexts: []
         }
     },
     computed: {
-        getLrc() {
-            let lrcTime = [];
-            let lrcText = [];
-            if (typeof this.songsList[this.current_index].lrc !== 'string') {
-                lrcText = ['歌词加载中'];
-            } else {
-                let lrcInfo = this.songsList[this.current_index].lrc.split('\n') || '';
-                for (let lrcs of lrcInfo) {
-                    let tmp = lrcs.split(']');
-                    let tmp2 = tmp[0].split(':');
-                    let time = (parseFloat(tmp2[0].replace('[', '')) * 60 + parseFloat(tmp2[1])).toFixed(2);
-                    lrcText.push(tmp[1]);
-                    lrcTime.push(time);
-                }
-                lrcTime.push(1 + lrcTime[lrcTime.length - 1]);
-            }
-            return {
-                lrcTimes: lrcTime,
-                lrcTexts: lrcText
-            }
-        },
-        ...mapState([
-            'songsList', 'current_index'
-        ])
+
     },
-    props: ['current_time'],
-    beforeMount() {
-        // console.log(typeof this.songsList[this.current_index]);
-        // console.log(this.getLrc.lrcTimes)
-    },
-    created() {
-        // console.log(11)
-    },
+    props: ['current_time', 'current_song'],
     watch: {
-        current_time: function(newValue, oldValue) {
-            document.getElementsByClassName('lrcInfo')[0].parentNode.scrollTop = 0;
-            for (let i = 0; i < this.getLrc.lrcTimes.length; i++) {
-                if (newValue > this.getLrc.lrcTimes[i] && newValue < this.getLrc.lrcTimes[i + 1]) {
-                    this.current_lrc = i;
-                    if (i >= 5) {
-                        document.getElementsByClassName('lrcInfo')[0].parentNode.scrollTop = parseInt(window.getComputedStyle(document.getElementsByClassName('lrcInfo')[0]).height) * (i - 5)
+        current_song: {
+            handler: function(newValue, oldValue) {
+                if (newValue.lrc) {
+                    let lrcInfo = newValue.lrc.split('\n') || '';
+                    let lrcText = [];
+                    let lrcTime = [];
+                    for (let lrcs of lrcInfo) {
+                        let tmp = lrcs.split(']');
+                        let tmp2 = tmp[0].split(':');
+                        let time = (parseFloat(tmp2[0].replace('[', '')) * 60 + parseFloat(tmp2[1])).toFixed(2);
+                        lrcText.push(tmp[1]);
+                        lrcTime.push(time);
+                    };
+                    this.lrcTimes = lrcTime;
+                    this.lrcTexts = lrcText;
+                }
+            },
+            immediate: true
+        },
+        current_time: {
+            handler: function(newValue, oldValue) {
+                for (let i = 0; i < this.lrcTimes.length; i++) {
+                    if (newValue > this.lrcTimes[i] && oldValue < this.lrcTimes[i]) {
+                        let parentNode = document.getElementsByClassName('lrcInfo')[0].parentNode;
+                        let lineHeight = window.getComputedStyle(document.getElementsByClassName('lrcInfo')[0]).height;
+                        this.current_lrc = i;
+                        if (i >= 5) {
+                            parentNode.scrollTop = parseInt(lineHeight) * (i - 5)
+                        }
                     }
                 }
-            }
+            },
+            immediate: true
         }
     }
 }

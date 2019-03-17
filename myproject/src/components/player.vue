@@ -1,7 +1,7 @@
 <template>
     <div>
         <list></list>
-        <lyric :current_time='current_time'></lyric>
+        <lyric :current_time='current_time' v-if="loaded" :current_song='current_song'></lyric>
         <div class="player">
             <div class="button">
                 <button @click="changeItem(false)">上一首</button>
@@ -15,7 +15,7 @@
                 <p class="progress" @click="jumpTime()"><span class="bar" :style="{ width : current_time / song_time * 100 + '%'}"></span></p>
             </div>
         </div>
-        <audio id="myAudio" :src="songsList[current_index].src" autoplay ref="myAudio"></audio>
+        <audio id="myAudio" :src="current_song.src" autoplay ref="myAudio"></audio>
     </div>
 </template>
 <script>
@@ -39,16 +39,12 @@ export default {
             play_mode: 0,
             is_start: true,
             song_time: 0,
-            current_time: 0
+            current_time: 0,
+            loaded: false,
+            current_song: {}
         }
     },
     watch: {
-        current_index: {
-            handler(newVal, oldVal) {
-                this.getResource(newVal);
-            },
-            immediate: true
-        },
         hash: {
             handler(newVal, oldVal) {
                 let res = false;
@@ -64,17 +60,35 @@ export default {
             },
             immediate: true
         },
-        localStorage: {
+        current_index: {
             handler(newVal, oldVal) {
-                console.log(newVal)
-                if (newVal !== oldVal) {
-                    console.log('change')
-                    console.log(this.songsList)
-                    this.$forceUpdate();
-                }
+                let _this = this;
+                this.loaded = false;
+                _this.$axios.get('/info', {
+                    params: {
+                        r: 'play/getdata',
+                        hash: _this.songsList[newVal].hash
+                    }
+                })
+                .then(function(res) {
+                    _this.current_song = {
+                        img: res.data.data.img,
+                        lrc: res.data.data.lyrics,
+                        src: res.data.data.play_url
+                    };
+                    _this.loaded = true;
+                })
+                .catch(function(err) {
+                    console.log(err);
+                })
+                this.$router.push({
+                    name: 'player',
+                    query: {
+                        hash: this.songsList[newVal].hash
+                    }
+                })
             },
-            immediate: true,
-            deep: true
+            immediate: true
         }
     },
     created() {
@@ -86,9 +100,6 @@ export default {
     computed: {
         hash: function() {
             return this.$route.query.hash;
-        },
-        localStorage: function() {
-            return JSON.parse(window.localStorage.getItem('storageSongsList'));
         },
         ...mapState([
             'songsList', 'current_index'
@@ -152,7 +163,7 @@ export default {
             _audio.currentTime = _audio.duration * x / parseFloat(w);
         },
         ...mapMutations([
-            'getResource', 'changeItem', 'listChange', 'startPlay'
+            'changeItem', 'listChange', 'startPlay'
         ])
     }
 };
