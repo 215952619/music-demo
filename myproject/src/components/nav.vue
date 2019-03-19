@@ -13,6 +13,7 @@
     </div>
 </template>
 <script>
+    import {mapState} from 'vuex'
     export default {
         name: 'myNav',
         data(){
@@ -30,8 +31,8 @@
                     path: 'singer',
                     name: '歌手'
                 }, {
-                    path: 'player',
-                    name: '播放器'
+                    path: 'album',
+                    name: '专辑'
                 }]
             }
         },
@@ -51,6 +52,34 @@
                 shadowRadius.style.width = '0.5rem';
                 shadowRadius.style.height = '0.5rem';
                 shadowRadius.style.borderRadius = '0.25rem';
+            }
+        },
+        computed: {
+            ...mapState([
+                'songsList'
+            ])
+        },
+        watch: {
+            'songsList': {
+                handler: function(value) {
+                    if (value.length === 0) {
+                        this.links.forEach((v, i) => {
+                            if (v.path === 'player') {
+                                this.links.slice(i, 1);
+                            }
+                        })
+                    } else {
+                        this.links = [
+                            ...this.links,
+                            {
+                                path: 'player',
+                                name: '播放器'
+                            }
+                        ]
+                    }
+                },
+                immediate: true,
+                deep: true
             }
         }
     }

@@ -8,7 +8,7 @@
       <img src="../assets/search.jpg" @click = 'search(searchWork)'/>
     </div>
     <div class="centerbox">
-      <span><router-link :to="{name:'undefined'}">客服中心</router-link></span>
+      <span><router-link :to="{name:'about'}">客服中心</router-link></span>
       <span><router-link :to="{name:'user'}">个人中心</router-link></span>
       <span><router-link :to="{name:'about'}">关于我们</router-link></span>
     </div>
@@ -125,9 +125,7 @@ export default {
   text-decoration: underline;
 }
 .loginbox, .personbox{
-  position: absolute;
-  width: 15%;
-  right: 4rem;
+  margin-left: 5rem;
   text-align: center;
 }
 .loginbox span{

@@ -1,8 +1,7 @@
 <template>
-    <list-table :pData='{data:infoData,songsList,total,maxpage,count}' class="main" @pageChage='childSearch'></list-table>
+    <list-table :pData='{data:infoData,total,maxpage,count}' class="main" @pageChage='childSearch'></list-table>
 </template>
 <script>
-import {mapState} from 'vuex'
 export default {
     data(){
         return {
@@ -16,10 +15,7 @@ export default {
     computed: {
         specialId: function() {
             return this.$route.params.specialid;
-        },
-        ...mapState([
-            'songsList'
-        ])
+        }
     },
     methods: {
         getPlistInfo(id, page) {

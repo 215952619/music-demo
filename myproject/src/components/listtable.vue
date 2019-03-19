@@ -1,11 +1,7 @@
 <template>
     <table>
         <thead>
-            <td>歌曲名</td>
-            <td>歌手</td>
-            <td>专辑</td>
-            <td>时长</td>
-            <td>操作</td>
+            <td v-for="(navdata,index) in nav" :key="index">{{navdata}}</td>
         </thead>
         <tbody>
             <tr v-for="(data,index) in pData.data" :key="index">
@@ -41,7 +37,13 @@ export default {
     name: 'ListTable',
     data () {
         return {
-            page: 1
+            page: 1,
+            navInfo: ['歌曲名', '歌手名', '专辑', '时长', '操作']
+        }
+    },
+    computed: {
+        nav: function() {
+            return this.pData.nav || this.navInfo
         }
     },
     props: ['pData'],
@@ -102,6 +104,7 @@ table{
     border-collapse: collapse;
     line-height: 2.5rem;
     font-size: 0.8rem;
+    text-align: center;
 }
 thead{
     background: lightslategray;
@@ -120,6 +123,9 @@ tbody span{
     height: 13px;
     background: url(../assets/icon_splice.png) no-repeat;
     margin: 0 2px;
+}
+tbody tr:nth-of-type(2n){
+    background-color: #eee;
 }
 tbody a:nth-of-type(1) span{
     background-position: 0 0;

@@ -1,66 +1,89 @@
 <template>
-  <div>
-    <p class="capP">今日精选<span class="capS" @click="changeRecomm()">试试手气</span></p>
-    <ul v-for="(data,index) in recommendationData" :key='index'>
-      <li v-for="(info,index) in data" :key='index'>{{info.name}}</li>
-    </ul>
-  </div>
+    <div>
+        <p class="capP">新歌抢先听</p>
+        <list-table :pData='{data:infoData,nav:navInfo,total,maxpage,count}' class="main"></list-table>
+    </div>
 </template>
-
 <script>
-import api from '../api/storage'
 export default {
-  name: 'Home',
-  data () {
-    return {
-      msg: 'home',
-      recommendationId: 10,
-      recommendationData: {}
-    }
-  },
-  methods: {
-    changeRecomm() {
-      this.recommendationId = api.getRandomNum(1, 28);
-    }
-  },
-  watch: {
-    recommendationId: {
-      handler: function(val) {
-        let _this = this;
-        _this.$axios.get('/recommend', {
-            params: {
-                r: 'area/share',
-                areaid: val
-            }
-        })
-        .then(function(res) {
-          _this.recommendationData = {};
-          res.data.module_info.forEach((value) => {
-            _this.recommendationData[value.skip_type] = [];
-            let arr = [];
-            value.module_data.forEach((v) => {
-              arr.push({mark: v.mark, img: v.images});
+    name: 'About',
+    data(){
+        return {
+            infoData: [],
+            total: null,
+            maxpage: null,
+            size: 30,
+            count: 0,
+            navInfo: ['歌曲名', '添加时间', '专辑', '时长', '操作']
+        }
+    },
+    created(){
+        this.getNewsInfo();
+    },
+    methods: {
+        getNewsInfo() {
+            let _this = this;
+            _this.$axios.get('/api', {
+                params: {
+                    json: 'true'
+                }
+            })
+            .then(function(res) {
+                _this.infoData = [];
+                let arr = [];
+                _this.total = res.data.data.length;
+                _this.infoData.total = res.data.data.length;
+                _this.maxpage = Math.ceil(res.data.data.length / _this.size);
+                res.data.data.forEach(value => {
+                    let obj = {
+                        hash: value.hash,
+                        filename: value.filename,
+                        addtime: value.addtime
+                    };
+                    arr.push(obj);
+                });
+                return arr
+            })
+            .then(function(res) {
+                res.forEach(value => {
+                    _this.$axios.get('/search/song', {
+                        params: {
+                            format: 'json',
+                            keyword: value.filename,
+                            page: 1,
+                            pagesize: 5,
+                            showtype: 1
+                        }
+                    })
+                    .then(function(msg) {
+                        msg.data.data.info.forEach(v => {
+                            if (v.hash.toUpperCase() === value.hash.toUpperCase()) {
+                                let obj = {
+                                    hash: v.hash,
+                                    songname: v.filename,
+                                    singername: value.addtime,
+                                    albumname: v.album_name,
+                                    timelong: v.duration
+                                };
+                                _this.infoData.push(obj);
+                            }
+                        })
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
+                })
+            })
+            .catch(function(err) {
+                console.log(err);
             });
-            let obj = {
-              type: value.skip_type,
-              name: value.name,
-              data: arr
-            };
-            _this.recommendationData[value.skip_type].push(obj);
-          });
-          if (JSON.stringify(_this.recommendationData) === '{}') {
-            _this.changeRecomm();
-          }
-        })
-        .catch(function(err) {
-            console.log(err);
-        });
-      },
-      immediate: true
+        }
     }
-  }
 }
 </script>
-
 <style scoped>
+.main{
+    width: 90%;
+    margin: 0 auto;
+}
 </style>

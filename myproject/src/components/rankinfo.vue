@@ -1,12 +1,11 @@
 <template>
-    <list-table :pData='{data:infoData,songsList,total,maxpage,count}' class="main" @pageChage='childSearch'></list-table>
+    <list-table :pData='{data:infoData,total,maxpage,count}' class="main" @pageChage='childSearch'></list-table>
 </template>
 <script>
-import {mapState} from 'vuex'
 export default {
     data(){
         return {
-            infoData: {},
+            infoData: [],
             total: null,
             maxpage: null,
             size: 30,
@@ -16,10 +15,7 @@ export default {
     computed: {
         rankId: function() {
             return this.$route.params.rankid;
-        },
-        ...mapState([
-            'songsList'
-        ])
+        }
     },
     methods: {
         getRankInfo(id, page) {

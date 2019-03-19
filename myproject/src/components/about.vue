@@ -8,7 +8,7 @@
         name: 'About',
         data(){
             return {
-                msg: 'about'
+                msg: '模块完善中，请静候佳音……'
             }
         }
     }

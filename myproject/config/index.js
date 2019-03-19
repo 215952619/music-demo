@@ -32,11 +32,18 @@ module.exports = {
           '^/search': ''
         }
       },
-      '/recommend': {
+      '/hot': {
+        target: 'http://mobilecdn.kugou.com/api/v3/search/hot',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/hot': ''
+        }
+      },
+      '/albuminfo': {
         target: 'https://m2.service.kugou.com/yueku/category/index.php',
         changeOrigin: true,
         pathRewrite: {
-          '^/recommend': ''
+          '^/albuminfo': ''
         }
       }
     },

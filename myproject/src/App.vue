@@ -53,6 +53,9 @@ a{
 html,body{
   height: 100%;
 }
+#app{
+  min-width: 1024px;
+}
 .capP{
   line-height: 4rem;
   font-size: 2rem;

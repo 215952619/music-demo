@@ -7,6 +7,8 @@ import Plist from '@/components/plist'
 import PlistInfo from '@/components/plistinfo'
 import Singer from '@/components/singer'
 import SingerInfo from '@/components/singerInfo'
+import Album from '@/components/album'
+import AlbumInfo from '@/components/albuminfo'
 import Player from '@/components/player'
 import Details from '@/components/details'
 import Undefined from '@/components/404'
@@ -30,7 +32,6 @@ export default new Router({
       path: '/rank',
       name: 'rank',
       component: Rank,
-      redirect: '/rank/info/8888',
       children: [{
         path: '/rank/info/:rankid',
         name: 'rankInfo',
@@ -40,7 +41,6 @@ export default new Router({
       path: '/plist',
       name: 'plist',
       component: Plist,
-      redirect: '/plist/info/530877',
       children: [{
         path: '/plist/info/:specialid',
         name: 'plistInfo',
@@ -50,11 +50,19 @@ export default new Router({
       path: '/singer',
       name: 'singer',
       component: Singer,
-      redirect: '/singer/info/88',
       children: [{
         path: '/singer/info/:classid',
         name: 'singerInfo',
         component: SingerInfo
+      }]
+    }, {
+      path: '/album',
+      name: 'album',
+      component: Album,
+      children: [{
+        path: '/album/info/:albumid',
+        name: 'albumInfo',
+        component: AlbumInfo
       }]
     }, {
       path: '/player',
