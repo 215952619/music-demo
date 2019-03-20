@@ -58,7 +58,14 @@ export default {
 }
 </script>
 <style scoped>
+li{
+    text-align: center;
+    font-size: 0.8rem;
+    line-height: 1.5rem;
+    color: #aaa;
+}
 .current_lrc {
+    font-size: 1.5rem;
     color: red;
 }
 </style>

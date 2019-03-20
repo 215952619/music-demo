@@ -55,6 +55,7 @@ html,body{
 }
 #app{
   min-width: 1024px;
+  background-color: rgba(0, 0, 0, 0.01);
 }
 .capP{
   line-height: 4rem;

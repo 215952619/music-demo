@@ -6,7 +6,8 @@
             </li>
         </ul>
         <ul class="navlist">
-            <li v-for="(link,index) in links" :key="index" @mouseover="mouseover(index)" @mouseout="mouseout(index)">
+            <li v-for="(link,index) in links" :key="index" :class="{current_nav:link.path===current_path}"
+             @mouseover="mouseover(index)" @mouseout="mouseout(index)">
                 <router-link :to="{name:link.path}">{{link.name}}</router-link>
             </li>
         </ul>
@@ -33,7 +34,8 @@
                 }, {
                     path: 'album',
                     name: '专辑'
-                }]
+                }],
+                isAdd: false
             }
         },
         methods: {
@@ -55,6 +57,16 @@
             }
         },
         computed: {
+            current_path: function() {
+                let res = '';
+                let str = this.$route.name;
+                this.links.forEach((v, i) => {
+                    if (str.includes(v.path)) {
+                        res = v.path
+                    }
+                });
+                return res
+            },
             ...mapState([
                 'songsList'
             ])
@@ -68,14 +80,18 @@
                                 this.links.slice(i, 1);
                             }
                         })
+                        this.isAdd = false;
                     } else {
-                        this.links = [
-                            ...this.links,
-                            {
-                                path: 'player',
-                                name: '播放器'
-                            }
-                        ]
+                        if (!this.isAdd) {
+                            this.links = [
+                                ...this.links,
+                                {
+                                    path: 'player',
+                                    name: '播放器'
+                                }
+                            ];
+                            this.isAdd = true;
+                        }
                     }
                 },
                 immediate: true,
@@ -111,6 +127,9 @@ li{
     border-right: 2px dotted white;
 }
 .navlist li:hover{
+    box-shadow: rgba(0, 0, 255, 0.8) 0 0 2rem inset;
+}
+.current_nav{
     box-shadow: rgba(0, 0, 255, 0.8) 0 0 2rem inset;
 }
 .shadow li{

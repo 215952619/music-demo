@@ -46,25 +46,34 @@ export default {
 }
 li {
     list-style: none;
+    font-size: 0.8rem;
     line-height: 1.5rem;
     position: relative;
+    cursor: pointer;
 }
-li span:first-of-type{
-    width: 60%;
+li span:nth-of-type(1){
+    padding-left: 0.5rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+li span:nth-of-type(2){
+    position: absolute;
+    right: 3rem;
 }
 li span:last-of-type{
     display: inline-block;
-    width: 0.75rem;
-    height: 0.75rem;
-    background: url(../assets/icon_splice.png) no-repeat;
-    background-position: -420px 0px;
-    margin: 0.375rem;
+    width: 1rem;
+    height: 1rem;
+    background: url(../assets/btn.png) no-repeat;
+    background-position: -272px -63px;
+    margin: 0.25rem;
     position: absolute;
     right: 0;
     top: 0;
     cursor: pointer;
 }
 li span:last-of-type:hover{
-    background-position: -420px -60px;
+    background-position: -256px -63px;
 }
 </style>

@@ -33,7 +33,19 @@ import {mapMutations} from 'vuex';
                     setTimeout(() => {
                         _this.isPass = true;
                     }, 1000);
-                }
+                };
+                this.$axios.get('/service/login', {
+                    params: {
+                        name: this.username,
+                        pwd: this.password
+                    }
+                })
+                .then(function(res) {
+                    console.log(res)
+                })
+                .catch(function(err) {
+                    console.log(err)
+                })
             },
             close() {
                 this.loginBoxHidden();
