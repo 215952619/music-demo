@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="undefined">
         {{msg}}
     </div>
 </template>
@@ -8,7 +8,7 @@
         name: 'User',
         data(){
             return {
-                msg: 'user'
+                msg: '模块完善中，请静候佳音……'
             }
         }
     }

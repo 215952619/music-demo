@@ -9,7 +9,7 @@ export default new Vuex.Store({
         songsList: [],
         isPlay: false,
         userInfo: {
-            username: '游客',
+            username: '',
             isVip: false,
             vipStage: 0
         }
@@ -72,6 +72,12 @@ export default new Vuex.Store({
             } else {
                 localStorage.setItem(item, JSON.stringify(state[item]));
             }
+        },
+        loginSuccess(state, obj) {
+            state.userInfo.username = obj.name;
+            state.userInfo.isVip = obj.isVip;
+            state.userInfo.vipStage = obj.vipStage;
+            localStorage.setItem('userInfo', JSON.stringify(state.userInfo));
         }
     }
 })

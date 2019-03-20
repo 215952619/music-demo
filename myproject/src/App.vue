@@ -50,6 +50,12 @@ a{
   color: inherit;
   text-decoration: none;
 }
+.undefined{
+  text-align: center;
+  line-height: 20rem;
+  font-size: 3rem;
+  font-weight: bolder;
+}
 html,body{
   height: 100%;
 }

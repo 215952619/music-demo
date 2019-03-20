@@ -5,7 +5,7 @@
             <p>欢迎您登陆本网站</p>
             <input type="text" placeholder="请输入您的昵称" v-model="username" />
             <input type="password" placeholder="请输入您的密码" v-model="password" />
-            <input type="submit" value="点击登陆" @click="Login"/>
+            <input type="submit" value="点击登陆" @click="loginReq"/>
             <b v-show="!isPass">您的登录名或者密码输入错误，请重新输入</b>
             <span>还没注册？<router-link :to="{name:'regist'}">点击注册</router-link></span>
         </div>
@@ -23,25 +23,29 @@ import {mapMutations} from 'vuex';
             }
         },
         methods: {
-            Login() {
+            loginReq() {
                 let _this = this;
-                if (this.username === 'lyy' && this.password === '123') {
-                    this.loginBoxHidden();
-                    this.login();
-                } else {
-                    this.isPass = false;
-                    setTimeout(() => {
-                        _this.isPass = true;
-                    }, 1000);
-                };
-                this.$axios.get('/service/login', {
+                _this.$axios.get('/service/login', {
                     params: {
-                        name: this.username,
-                        pwd: this.password
+                        name: _this.username,
+                        pwd: _this.password
                     }
                 })
                 .then(function(res) {
-                    console.log(res)
+                    if (res.data.code === 'ok' && res.data.rows !== 0) {
+                        _this.loginBoxHidden();
+                        _this.loginSuccess({
+                            name: res.data.data.name,
+                            isVip: false,
+                            vipStage: 0
+                        });
+                        _this.login();
+                    } else {
+                        _this.isPass = false;
+                        setTimeout(() => {
+                            _this.isPass = true;
+                        }, 1000);
+                    }
                 })
                 .catch(function(err) {
                     console.log(err)
@@ -51,7 +55,7 @@ import {mapMutations} from 'vuex';
                 this.loginBoxHidden();
             },
             ...mapMutations([
-                'login', 'loginBoxHidden'
+                'login', 'loginBoxHidden', 'loginSuccess'
             ])
         }
     }

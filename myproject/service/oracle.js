@@ -11,6 +11,7 @@ db.query = function(sql, fn) {
             console.log('database connect err: ' + err.message);
             return
         }
+        conn.setAutoCommit(true);
         conn.execute(sql, [], function(err, results) {
             if (err) {
                 console.log('database query err: ' + err.message);

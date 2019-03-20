@@ -11,7 +11,7 @@
                 <td>{{data.timelong}}</td>
                 <td>
                     <a @click="play(index, data.hash)"><span></span></a>
-                    <a @click="addCollection(index)"><span></span></a>
+                    <a @click="addCollection(index)" v-show="!isColl(index)"><span></span></a>
                     <a><span></span></a>
                 </td>
             </tr>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import {mapMutations} from 'vuex'
+import {mapState, mapMutations} from 'vuex'
 export default {
     name: 'ListTable',
     data () {
@@ -44,7 +44,21 @@ export default {
     computed: {
         nav: function() {
             return this.pData.nav || this.navInfo
-        }
+        },
+        isColl: function(){
+            return function(index) {
+                let res = false;
+                this.songsList.forEach(v => {
+                    if (this.pData.data[index].hash.toUpperCase() === v.hash.toUpperCase()) {
+                        res = true;
+                    }
+                });
+                return res;
+            }
+        },
+        ...mapState([
+            'songsList'
+        ])
     },
     props: ['pData'],
     methods: {

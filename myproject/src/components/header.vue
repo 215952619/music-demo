@@ -17,26 +17,22 @@
       <span><router-link :to="{name:'regist'}">[注册]</router-link></span>
     </div>
     <div class="personbox" v-if="$store.state.isLog">
-      <span><router-link :to="{name:'user'}">{{username}}</router-link>欢迎您</span><label @click="logout">[退出]</label>
+      <span><router-link :to="{name:'user'}">{{userInfo.username}}</router-link>欢迎您</span><label @click="logout">[退出]</label>
     </div>
   </div>
 </template>
 
 <script>
 import jsonp from 'jsonp';
-import {mapMutations} from 'vuex';
+import {mapState, mapMutations} from 'vuex';
 export default {
   name: 'MyHeader',
   data () {
     return {
-      searchWork: '',
-      username: ''
+      searchWork: ''
     }
   },
   created() {
-    if (localStorage.getItem('userInfo')) {
-      this.username = JSON.parse(localStorage.getItem('userInfo')).username + '，';
-    }
     let PlaceHold = 'http://so.service.kugou.com/v1/word_nofocus';
     let otps = {
         params: 'callback',
@@ -51,6 +47,11 @@ export default {
             console.log(err);
         }
     })
+  },
+  computed: {
+    ...mapState([
+      'userInfo'
+    ])
   },
   methods: {
     search(keyword) {
