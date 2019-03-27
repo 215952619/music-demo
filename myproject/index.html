@@ -3,8 +3,20 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>myproject</title>
+    <script>
+        let dpr = window.devicePixelRatio;
+        let meta = document.createElement('meta');
+        let initialScale = 1 / dpr;
+        let maximumScale = 1 / dpr;
+        let minimumScale = 1 / dpr;
+        meta.setAttribute('name', 'viewport');
+        let content = 'width=device-width,initial-scale=' + initialScale +
+            ',maximum-scale=' + maximumScale + ',maximum-scale=' + minimumScale + ',user-scalable=no';
+            // console.log(content)
+        meta.setAttribute('content', content);
+        document.head.appendChild(meta);
+    </script>
 </head>
 
 <body>

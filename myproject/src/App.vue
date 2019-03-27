@@ -60,7 +60,8 @@ html,body{
   height: 100%;
 }
 #app{
-  min-width: 1024px;
+  height: 100%;
+  min-width: 1200px;
   background-color: rgba(0, 0, 0, 0.01);
 }
 .capP{

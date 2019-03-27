@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="main">
         <list></list>
         <lyric :current_time='current_time' v-if="loaded" :current_song='current_song'></lyric>
         <div class="player">
@@ -203,11 +203,14 @@ export default {
 };
 </script>
 <style scoped>
+.main{
+    height: calc(100% - 11rem);
+}
 ul {
     box-sizing: border-box;
     display: inline-block;
     width: 41%;
-    height: 18.5rem;
+    height: calc(100% - 10rem);
     padding: 0.5rem 0;
     border: 1px solid #ccc;
     margin: 0.5rem 0;

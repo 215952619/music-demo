@@ -19,6 +19,7 @@ app.get('/login', function(req, res) {
 
 app.post('/regist', function(req, res) {
     let str = `select * from ly_music_user where name = '${req.body.params.name}'`;
+    console.log(str)
     db.query(str, function(result) {
         if (result.rows.length > 0) {
             res.json({code: 'warn', data:{msg: '该用户已经存在'}});
@@ -26,6 +27,7 @@ app.post('/regist', function(req, res) {
             let str = `insert into ly_music_user(name,pwd,age,sex,tel,qq)
              values('${req.body.params.name}','${req.body.params.pwd}',${req.body.params.age},
              '${req.body.params.sex}','${req.body.params.tel}','${req.body.params.qq}')`;
+             console.log(str)
             db.query(str, function(results) {
                 res.json({code: 'ok', data: results})
             })
